@@ -57,13 +57,13 @@ eu-chronic-illness-ml/
 
 ### 1. Install Dependencies
 
-`bash
+`
 pip install -r requirements.txt
 `
 
 ### 2. Run the Complete Pipeline
 
-`bash
+`
 python main.py
 `
 
@@ -79,50 +79,33 @@ This will:
 
 **Output**: All visualizations and data files written to data/processed/plots/
 
-### 3. Use Individual Preprocessing Components
+# Load the data
+Put the data in .tsv format in data/raw/ directory
 
-`python
-from src.preprocessing import (
-    detect_missing_values,
-    impute_missing_values,
-    encode_with_one_hot,
-    scale_features_standard,
-    extract_datetime_features
-)
 
-# Load your data
-import pandas as pd
-df = pd.read_csv('your_data.csv')
+# Preprocessing Pipeline Details
 
-# Use any preprocessing function independently
-missing_stats = detect_missing_values(df)
-df_imputed = impute_missing_values(df)
-df_scaled, scaler = scale_features_standard(df_imputed)
-`
-
-## Preprocessing Pipeline Details
-
-### Step 1: Parse TSV to Long Format
+## Step 1: Parse TSV to Long Format
 - Input: ESTAT TSV with multi-line headers (units, measures, dimensions)
 - Output: Long format DataFrame with columns: value, unit_*, quantile_*, age_*, sex_*, geo_*, year_*
 - Extracts numerical values from complex ESTAT format using regex
 
-### Step 2: Detect Missing Values
+## Step 2: Detect Missing Values
 - Scans for NaN, None, empty strings
 - Reports: total missing count, columns affected, percentage of missing
 - Target column 'value' has 101,851 missing values (33.2%)
 
-### Step 3: Impute Missing Values
+## Step 3: Impute Missing Values
 - Numerical columns: SimpleImputer with strategy='mean'
 - Categorical columns: SimpleImputer with strategy='most_frequent'
 - Default behavior: keep NaN values; can drop rows above threshold
 
-### Step 4: Encode Categorical Features
+## Step 4: Encode Categorical Features
 - One-hot encoding with drop_first=True to avoid multicollinearity
 - Categorical columns detected: quantile, age, sex, geo, year
 - Result: Binary indicators for each category value
 
-### Step 5: Scale Numerical Features
+## Step 5: Scale Numerical Features
 - StandardScaler (z-score normalization): mean=0, std=1
 - All numerical columns scaled: value, unit_PC_POP, and all one-hot encoded features
 - Scaler is fitted on training data and reusable for test sets
@@ -150,7 +133,7 @@ scikit-learn>=0.24
 `
 
 All dependencies pinned in 
-equirements.txt.
+requirements.txt.
 
 ## Code Design
 
@@ -161,7 +144,6 @@ equirements.txt.
 
 ### Documentation
 - All functions have docstrings describing purpose, arguments, returns, and exceptions
-- No inline comments; code is self-documenting through clear naming
 - Type hints for parameters and return values
 
 ### Auto-Detection
@@ -178,7 +160,7 @@ equirements.txt.
 
 ## Next Steps
 
-- Implement 	rain.py for model training (regression and classification baselines)
+- Implement train.py for model training (regression and classification baselines)
 - Feature selection and dimensionality reduction
 - Hyperparameter tuning and cross-validation
 - Model evaluation and comparison with baseline metrics
