@@ -16,3 +16,5 @@ Thumbs.db
 
 data/raw/*
 data/processed/*
+
+data/models*
